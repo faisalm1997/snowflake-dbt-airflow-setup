@@ -111,7 +111,3 @@ dbt run --profiles-dir /path/to/your/profiles/dir
 - Ensure your Snowflake account and warehouse are active.
 - Double-check your account, user, password, and other connection values.
 - Use `dbt debug` to verify your connection.
-
----
-
-This quick setup guide should enable you to start developing models and transforming data in Snowflake using dbt.git r

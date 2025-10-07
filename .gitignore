@@ -1,4 +1,5 @@
 ./venv
+./logs 
 
 # AWS CLI Installation files and plugins
 awscli-bundle/

@@ -19,7 +19,7 @@ It provides a modern, scalable data engineering pipeline leveraging Airflow for 
 
 - Python 3.8 or higher
 - [Snowflake account](https://signup.snowflake.com/)
-- [DBT CLI](https://docs.getdbt.com/docs/core/cli-installation)
+- [DBT CLI](https://docs.getdbt.com/docs/cloud/cloud-cli-installation)
 - [Apache Airflow](https://airflow.apache.org/)
 - [Snowflake Python Connector](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector)
 - [DBT Snowflake Adapter](https://docs.getdbt.com/reference/adapter/snowflake)
@@ -49,7 +49,7 @@ It provides a modern, scalable data engineering pipeline leveraging Airflow for 
     pip install dbt-snowflake
     ```
 
-### Configure and setup Airflow
+## Configure and setup Airflow
 
 Airflow has already been installed and comes part of the ```requirements.txt``` file. Simply, type ```airflow version``` to confirm that airflow is up and running. 
 
@@ -87,7 +87,7 @@ To stop the Airflow services, you can use the provided stop script:
 
 ---
 
-### Debugging and troubleshooting Airflow issues 
+## Debugging and troubleshooting Airflow issues
 
 - **DAG not showing up:**  
   - Ensure your DAG file is in the `$AIRFLOW_HOME/dags` directory.
@@ -105,3 +105,12 @@ To stop the Airflow services, you can use the provided stop script:
 - **Database backend:**  
   - For production, use PostgreSQL or MySQL instead of the default SQLite.  
     Update the `sql_alchemy_conn` setting in `airflow.cfg`.
+
+## Security
+
+- Do not commit your .env file or secrets to version control.
+- Use Airflow Connections or environment variables for sensitive credentials.
+- Regularly update dependencies to patch security vulnerabilities.
+- Follow best practices for Snowflake security, including role-based access control and network policies.
+- Regularly back up your Airflow metadata database.
+- Monitor Airflow logs for any suspicious activity.

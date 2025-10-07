@@ -6,17 +6,10 @@ terraform {
   }
 }
 
-locals {
-  organization_name = "rmnctae"
-  account_name      = ""
-  private_key_path  = "~/.ssh/snowflake_tf_snow_key.p8"
-}
-
 provider "snowflake" {
-    organization_name = local.organization_name
-    account_name      = local.account_name
-    user              = "TERRAFORM_SVC"
-    role              = "SYSADMIN"
-    authenticator     = "SNOWFLAKE_JWT"
-    private_key       = file(local.private_key_path)
+  organization_name = var.organization_name
+  account_name      = var.account_name
+  user              = var.snowflake_user
+  role              = var.snowflake_role
+  password          = var.snowflake_password
 }

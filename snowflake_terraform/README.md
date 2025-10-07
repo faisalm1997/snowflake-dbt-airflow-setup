@@ -1,10 +1,18 @@
 # Snowflake Infrastructure with Terraform
 
-## Overview
-
-This guide explains how to provision and manage Snowflake infrastructure using Terraform, following best practices from the [Snowflake Terraform Quickstart](https://quickstarts.snowflake.com/guide/terraforming_snowflake/index.html#0).
-
----
+## Directory Structure 
+```
+snowflake_terraform/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── terraform.tfvars
+├── databases.tf
+├── schemas.tf
+├── warehouses.tf
+├── Makefile
+└── [README.md]
+```
 
 ## Prerequisites
 
@@ -17,8 +25,50 @@ This guide explains how to provision and manage Snowflake infrastructure using T
 
 ## Setup
 
-### 1. Clone the Repository
+1. Clone the Repository
+
+    ```sh
+    git clone https://github.com/<your-org>/snowflake-dbt-airflow-setup.git
+    cd snowflake-dbt-airflow-setup/snowflake_terraform
+    ```
+
+(The above step should already have been completed via the dbt/airflow setup steps)
+
+2. Install terraform (if not already done so)
+
+    ```sh
+    brew tap hashicorp/tap
+    brew install hashicorp/tap
+    ```
+
+3. Review and Edit Terraform Files:
+
+    a. Edit variables.tf to set or override variables for your environment.
+    
+    b. Review main.tf, databases.tf, schemas.tf, and warehouses.tf to ensure the resources match your requirements.
+    
+    c. You can add or modify resources as needed for your Snowflake setup.
+
+## Makefile 
+
+A Makefile is provided to simplify common Terraform commands.
+From the snowflake_terraform directory, you can run:
 
 ```sh
-git clone https://github.com/<your-org>/snowflake-dbt-airflow-setup.git
-cd snowflake-dbt-airflow-setup/snowflake_terraform
+make init           # Initialize Terraform and download providers
+make plan           # Show the execution plan
+make apply          # Apply the changes (will prompt for approval)
+make destroy       # Destroy all managed resources
+make fmt            # Format Terraform files
+make validate     # Validate Terraform configuration
+make output         # Show Terraform outputs
+```
+
+## Troubleshooting
+
+1. **Authentication errors:** Double-check your environment variables or terraform.tfvars for correct credentials.
+2. **Provider version issues:** Ensure your Terraform provider version matches the requirements in main.tf.
+3. **Permission errors:**
+Make sure your Snowflake user has the necessary privileges to create/modify resources.
+4. **State management:**
+For team use, consider using a remote backend for storing Terraform state securely.

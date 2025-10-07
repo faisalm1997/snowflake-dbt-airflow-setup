@@ -45,12 +45,9 @@ databricks-sql-connector
 dbt-adapters
 dbt-common
 dbt-core
-dbt-databricks
 dbt-extractor
 dbt-protos
 dbt-semantic-interfaces
-dbt-spark
-dbt-snowflake
 deepdiff
 Deprecated
 dill
@@ -133,7 +130,6 @@ pluggy
 propcache
 protobuf
 psutil
-pyarrow
 pyasn1
 pyasn1_modules
 pycparser

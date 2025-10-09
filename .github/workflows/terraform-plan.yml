@@ -1,15 +1,16 @@
-name: Snowflake Terraform Plan
+name: Terraform Plan
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
   terraform-plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +24,9 @@ jobs:
 
       - name: Configure Snowflake credentials
         run: |
-          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> ./snowflake_terraform/terraform.tfvars
-          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> ./snowflake_terraform/terraform.tfvars
-          echo "SNOWFLAKE_PRIVATE_KEY=${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> $GITHUB_ENV
+          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> $GITHUB_ENV
+          echo "SNOWFLAKE_PASSWORD=${{ secrets.SNOWFLAKE_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         working-directory: ./snowflake_terraform
@@ -42,9 +43,14 @@ jobs:
       - name: Terraform Plan
         working-directory: ./snowflake_terraform
         run: terraform plan -out=tfplan
-
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
           path: ./snowflake_terraform/tfplan
+
+      - name: Upload State File
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-state
+          path: ./snowflake_terraform/terraform.tfstate

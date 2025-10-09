@@ -13,3 +13,7 @@ provider "snowflake" {
   role              = var.snowflake_role
   password          = var.snowflake_password
 }
+
+terraform {
+  backend "local" {}
+}

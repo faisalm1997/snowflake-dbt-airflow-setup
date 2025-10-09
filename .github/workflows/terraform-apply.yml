@@ -1,12 +1,16 @@
 name: Terraform Apply
 
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Terraform Plan"]
+    types:
+      - completed
 
 jobs:
   terraform-apply:
+    name: Terraform Apply
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,9 +22,9 @@ jobs:
 
       - name: Configure Snowflake credentials
         run: |
-          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> ./snowflake_terraform/terraform.tfvars
-          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> ./snowflake_terraform/terraform.tfvars
-          echo "SNOWFLAKE_PRIVATE_KEY=${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> $GITHUB_ENV
+          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> $GITHUB_ENV
+          echo "SNOWFLAKE_PASSWORD=${{ secrets.SNOWFLAKE_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         working-directory: ./snowflake_terraform
@@ -32,6 +36,17 @@ jobs:
           name: terraform-plan
           path: ./snowflake_terraform
 
+      - name: Download State File
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-state
+          path: ./snowflake_terraform
+
       - name: Terraform Apply
         working-directory: ./snowflake_terraform
         run: terraform apply -auto-approve tfplan
+      - name: Upload Updated State
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-state
+          path: ./snowflake_terraform/terraform.tfstate

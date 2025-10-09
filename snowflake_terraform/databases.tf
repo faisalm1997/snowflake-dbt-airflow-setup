@@ -11,7 +11,7 @@ locals {
 
 resource "snowflake_database" "Landing" {
   name    = "Landing"
-  comment = "Landing database for raw data"
+  comment = "Landing database for raw uncurated data"
 
   is_transient                    = local.common_db_settings.is_transient
   data_retention_time_in_days     = local.common_db_settings.data_retention_time_in_days

@@ -42,7 +42,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ./snowflake_terraform
-        run: terraform plan -out=tfplan
+        run: terraform plan
       - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
         with:

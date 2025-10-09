@@ -7,8 +7,8 @@ terraform {
 }
 
 provider "snowflake" {
-  organization_name = var.organization_name
-  account_name      = var.account_name
+  organization_name = var.snowflake_organization_name
+  account_name      = var.snowflake_account_name
   user              = var.snowflake_user
   role              = var.snowflake_role
   password          = var.snowflake_password

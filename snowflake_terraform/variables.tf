@@ -1,14 +1,14 @@
-variable "organization_name" {
+variable "snowflake_organization_name" {
   description = "Snowflake organization name"
   type        = string
 }
 
-variable "account_name" {
+variable "snowflake_account_name" {
   description = "Snowflake account name"
   type        = string
 }
 
-variable "private_key_path" {
+variable "snowflake_private_key_path" {
   description = "Path to the Snowflake private key"
   type        = string
   default     = "~/.ssh/snowflake_tf_snow_key.p8"

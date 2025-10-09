@@ -1,0 +1,37 @@
+name: Terraform Apply
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.13.3
+
+      - name: Configure Snowflake credentials
+        run: |
+          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_PRIVATE_KEY=${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" >> ./snowflake_terraform/terraform.tfvars
+
+      - name: Terraform Init
+        working-directory: ./snowflake_terraform
+        run: terraform init
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: ./snowflake_terraform
+
+      - name: Terraform Apply
+        working-directory: ./snowflake_terraform
+        run: terraform apply -auto-approve tfplan

@@ -1,0 +1,50 @@
+name: Snowflake Terraform Plan
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.13.3
+
+      - name: Configure Snowflake credentials
+        run: |
+          echo "SNOWFLAKE_ACCOUNT=${{ secrets.SNOWFLAKE_ACCOUNT }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_USER=${{ secrets.SNOWFLAKE_USER }}" >> ./snowflake_terraform/terraform.tfvars
+          echo "SNOWFLAKE_PRIVATE_KEY=${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" >> ./snowflake_terraform/terraform.tfvars
+
+      - name: Terraform Init
+        working-directory: ./snowflake_terraform
+        run: terraform init
+
+      - name: Terraform Format Check
+        working-directory: ./snowflake_terraform
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        working-directory: ./snowflake_terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ./snowflake_terraform
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: ./snowflake_terraform/tfplan

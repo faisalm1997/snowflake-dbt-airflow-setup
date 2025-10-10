@@ -49,6 +49,15 @@ snowflake_terraform/
     
     c. You can add or modify resources as needed for your Snowflake setup.
 
+4. Setup terraform.tfvars file or export credentials locally 
+
+    ```sh
+    $ export SNOWFLAKE_USER="your_username"
+    $ export SNOWFLAKE_PRIVATE_KEY_PATH="your_private_key_path"
+    $ export SNOWFLAKE_ACCOUNT="your_account_locator"
+    $ export SNOWFLAKE_REGION="your_region"
+    ```
+
 ## Makefile 
 
 A Makefile is provided to simplify common Terraform commands.
